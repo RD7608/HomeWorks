@@ -12,4 +12,5 @@ def factor(n):
     return factor(n - 1) * n
 
 
-print(factor(10))
+a = 10
+print(str(a)+"!=", factor(10))
