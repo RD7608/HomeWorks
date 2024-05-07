@@ -13,4 +13,4 @@ def factor(n):
 
 
 a = 10
-print(str(a)+"!=", factor(10))
+print(str(a)+"!=", factor(a))
