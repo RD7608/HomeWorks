@@ -7,7 +7,7 @@ students = {'Johnny', 'Bilbo', 'Steve', 'Khendrik', 'Aaron'}
 # пустой словарь
 grades_dict = {}
 
-# сортируем множество students и объединяем со списком их оценок,
+# сортируем множество students и объединяем со списком их оценок с помощью zip,
 # в цикле проходим полученный результат и заносим в словарь
 for student, grade_list in zip(sorted(students), grades):
     # вычисляем среднюю оценку
