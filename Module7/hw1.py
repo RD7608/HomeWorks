@@ -19,6 +19,8 @@ For it hath been by sorrow nursed,
 And ached in sleepless silence, long;
 And now 'tis doomed to know the worst,
 And break at once - or yield to song.""")
+
+
 # Закрытие файла
 f.close()
 
