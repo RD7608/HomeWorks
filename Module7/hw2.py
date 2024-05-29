@@ -24,3 +24,6 @@ And break at once - or yield to song.""")
 with open(file_path, "r", encoding="utf-8") as f:
     contents = f.read()
     print(contents)
+
+# При использовании with нет необходимости закрывать файл, при завершении работы с ним
+# эта операция будет выполнена автоматически
