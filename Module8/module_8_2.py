@@ -19,11 +19,10 @@ def process_data(value):
         raise
     except ProcessingException as e:
         print(f"Ошибка обработки: {e}")
-        raise
 
 
 try:
-    result = process_data(0)
+    result = process_data(5)
     print(f"Результат обработки данных: {result}")
 except InvalidDataException as e:
     print(f"Ошибка в данных: {e}")
