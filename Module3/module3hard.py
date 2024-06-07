@@ -4,7 +4,7 @@ def calculate_structure_sum(data_structure):
             return item
         elif isinstance(item, str):
             return len(item)
-        elif isinstance(item, (list, tuple)):
+        elif isinstance(item, (list, tuple, set)):
             return sum(calculate(subitem) for subitem in item)
         elif isinstance(item, dict):
             return sum(calculate(key) + calculate(value) for key, value in item.items())
@@ -15,10 +15,10 @@ def calculate_structure_sum(data_structure):
 
 
 data_structure = [
-    [1, 2, 3],
-    {'a': 4, 'b': 5},
-    (6, {'cube': 7, 'drum': 8}),
-    "Hello",
+   [1, 2, 3],
+   {'a': 4, 'b': 5},
+   (6, {'cube': 7, 'drum': 8}),
+   "Hello",
     ((), [{(2, 'Urban', ('Urban2', 35))}])
 ]
 
