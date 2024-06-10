@@ -57,4 +57,5 @@ class Rect:
 
 # Пример использования
 area_rectangle = Rect(2, 4)
-print(area_rectangle())
+print(f"Стороны: {area_rectangle.a}, {area_rectangle.b}")
+print("Площадь:", area_rectangle())
