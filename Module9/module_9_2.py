@@ -56,6 +56,6 @@ class Rect:
 
 
 # Пример использования
-area_rectangle = Rect(2, 4)
-print(f"Стороны: {area_rectangle.a}, {area_rectangle.b}")
-print("Площадь:", area_rectangle())
+rectangle = Rect(2, 4)
+print(f"Стороны: {rectangle.a}, {rectangle.b}")
+print("Площадь:", rectangle())
