@@ -48,16 +48,35 @@ class Circle(Figure):
         return math.pi * self.__radius ** 2
 
 
+class Triangle(Figure):
+    sides_count = 3
+
+    def __init__(self, color, side1, side2, side3):
+        super().__init__(color, side1, side2, side3)
+
+        self.side1 = side1
+        self.side2 = side2
+        self.side3 = side3
+
+    def get_perimeter(self):
+        return self.side1 + self.side2 + self.side3
+
+    def get_area(self):
+        p = self.get_perimeter() / 2
+        return math.sqrt(p * (p - self.side1) * (p - self.side2) * (p - self.side3))
+
+
 class Cube(Figure):
     sides_count = 12
 
-    def __init__(self, color, sides):
-        super().__init__(color, sides)
+    def __init__(self, color, side_length):
+        super().__init__(color, *[side_length])
 
-        self.__sides = sides
+        self.side_length = side_length
 
     def get_volume(self):
-        return self.__sides ** 3
+        return self.side_length ** 3
+
 
 
 circle1 = Circle((200, 200, 100), 10)
@@ -81,4 +100,15 @@ print(circle1.get_sides())
 print(len(circle1))
 
 # Проверяем объем куба
+print(cube1.get_volume())
+
+
+triangle1 = Triangle((100, 150, 200), 5, 6, 7)
+
+print(triangle1.get_perimeter())
+print(triangle1.get_area())
+
+cube1 = Cube((50, 50, 50), 4)
+
+print(cube1.get_color())
 print(cube1.get_volume())
