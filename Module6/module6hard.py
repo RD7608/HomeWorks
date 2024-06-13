@@ -29,6 +29,9 @@ class Figure:
         if self.__is_valid_sides(*sides):
             self.__sides = list(sides)
 
+    def get_sides(self):
+        return self.__sides
+
     def __is_valid_sides(self, *sides):
         return all(isinstance(side, int) and side > 0 for side in sides) and len(sides) == self.sides_count
 
@@ -70,7 +73,7 @@ class Cube(Figure):
     sides_count = 12
 
     def __init__(self, color, side_length):
-        super().__init__(color, *[side_length])
+        super().__init__(color, side_length)
 
         self.side_length = side_length
 
@@ -78,9 +81,9 @@ class Cube(Figure):
         return self.side_length ** 3
 
 
-
 circle1 = Circle((200, 200, 100), 10)
 cube1 = Cube((222, 35, 130), 6)
+
 
 # Проверяем изменение цветов
 circle1.set_color(55, 66, 77)
