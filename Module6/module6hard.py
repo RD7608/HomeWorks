@@ -106,12 +106,12 @@ print(len(circle1))
 print(cube1.get_volume())
 
 
-triangle1 = Triangle((100, 150, 200), (5, 6, 7))
+triangle1 = Triangle((100, 150, 200), 5, 6, 7)
 
 print(triangle1.get_perimeter())
 print(triangle1.get_area())
 
-cube1 = Cube((50, 50, 50), 4)
+#cube1 = Cube((50, 50, 50), 4)
 
-print(cube1.get_color())
-print(cube1.get_volume())
+#print(cube1.get_color())
+#print(cube1.get_volume())
