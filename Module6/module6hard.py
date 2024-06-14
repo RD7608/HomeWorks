@@ -54,12 +54,12 @@ class Circle(Figure):
 class Triangle(Figure):
     sides_count = 3
 
-    def __init__(self, color, side1, side2, side3):
-        super().__init__(color, side1, side2, side3)
+    def __init__(self, color, sides):
+        super().__init__(color, sides)
 
-        self.side1 = side1
-        self.side2 = side2
-        self.side3 = side3
+        self.side1 = sides[0]
+        self.side2 = sides[1]
+        self.side3 = sides[2]
 
     def get_perimeter(self):
         return self.side1 + self.side2 + self.side3
@@ -106,7 +106,7 @@ print(len(circle1))
 print(cube1.get_volume())
 
 
-triangle1 = Triangle((100, 150, 200), 5, 6, 7)
+triangle1 = Triangle((100, 150, 200), (5, 6, 7))
 
 print(triangle1.get_perimeter())
 print(triangle1.get_area())
