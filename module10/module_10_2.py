@@ -20,8 +20,8 @@ class Knight(threading.Thread):
         enemies_left = 100
         day = 1
         while enemies_left > 0:
-            enemies_left -= self.skill
             time.sleep(1)  # Задержка в 1 секунду
+            enemies_left -= self.skill
             s_print(f"{self.name}, сражается {day} день(дня)..., осталось {enemies_left} воинов.")
             day += 1
 
