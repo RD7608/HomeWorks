@@ -25,7 +25,7 @@ class Knight(threading.Thread):
             s_print(f"{self.name}, сражается {day} день(дня)..., осталось {enemies_left} воинов.")
             day += 1
 
-        print(f"{self.name} одержал победу спустя {day - 1} дней!")
+        s_print(f"{self.name} одержал победу спустя {day - 1} дней!")
 
 
 # Создание рыцарей
