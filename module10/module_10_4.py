@@ -20,7 +20,7 @@ class Cafe:
         self.tables = tables
 
     def customer_arrival(self):
-        for customer_number in range(20):
+        for customer_number in range(1, 5):
             customer = Customer(customer_number)
             self.queue.put(customer)
             print(f"Посетитель номер {customer_number} прибыл.")
@@ -37,6 +37,20 @@ class Cafe:
                 return
         print(f"Посетитель номер {customer.number} ожидает свободный стол. (помещение в очередь)")
 
+    def register_customer(self, customer):
+        self.queue.put(customer)
+        print(f"Посетитель {customer} добавлен в очередь")
+
+    def start_serving_customers(self):
+        while not self.queue.empty():
+            customer = self.queue.get()
+            self.serve_customer(customer)
+
+    def print_table_status(self):
+        for table in self.tables:
+            status = "занят" if table.is_busy else "свободен"
+            print(f"Стол {table.number}: {status}")
+
 
 table1 = Table(1)
 table2 = Table(2)
@@ -47,4 +61,9 @@ cafe = Cafe(tables)
 
 customer_arrival_thread = threading.Thread(target=cafe.customer_arrival)
 customer_arrival_thread.start()
-customer_arrival_thread.join()
+
+
+time.sleep(2)  # Подождем немного перед запуском обслуживания
+
+cafe.start_serving_customers()
+cafe.print_table_status()
