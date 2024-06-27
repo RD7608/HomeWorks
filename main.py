@@ -16,25 +16,26 @@ class Cafe:
 
     def customer_arrival(self):
         customer_number = 1
-        while customer_number <= 20:
-            time.sleep(1)  # Представляем секунды
+        while customer_number <= 5:
+            time.sleep(1)
             print(f"Посетитель номер {customer_number} прибыл.")
             customer = Customer(customer_number, self)
             customer.start()
             customer_number += 1
 
+
     def serve_customer(self, customer):
         for table in self.tables:
             if not table.is_busy:
                 table.is_busy = True
-                print(f"Посетитель номер {customer.number} сел за стол {table.number}. (начало обслуживания)")
+                print(f"Посетитель номер {customer.number} сел за стол {table.number}.")
                 time.sleep(5)  # Время обслуживания 5 секунд
                 table.is_busy = False
-                print(f"Посетитель номер {customer.number} покушал и ушёл. (конец обслуживания)")
+                print(f"Посетитель номер {customer.number} покушал и ушёл.")
                 break
         else:
             self.queue.put(customer)
-            print(f"Посетитель номер {customer.number} ожидает свободный стол. (помещение в очередь)")
+            print(f"Посетитель номер {customer.number} ожидает свободный стол.")
 
 
 class Customer(threading.Thread):
