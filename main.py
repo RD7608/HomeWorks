@@ -23,7 +23,6 @@ class Cafe:
             customer.start()
             customer_number += 1
 
-
     def serve_customer(self, customer):
         for table in self.tables:
             if not table.is_busy:

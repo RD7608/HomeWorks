@@ -42,4 +42,5 @@ if __name__ == '__main__':
 
     manager.process_requests(requests)
 
-    print(manager.data)
+    sorted_data = dict(sorted(manager.data.items()))
+    print(sorted_data)
