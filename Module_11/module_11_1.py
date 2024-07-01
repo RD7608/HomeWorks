@@ -29,7 +29,6 @@ df['Цвет'] = df['Продажи'].apply(lambda x: 'green' if x > 1000 else (
 fig, ax = plt.subplots(figsize=(10, 6))
 # линейный
 plt.plot(df['Год'], df['Продажи'], marker='o', color='green', linestyle='-', linewidth=2)
-
 # столбчатый
 bar = plt.bar(df['Год'], df['Продажи'], align='center', alpha=0.5, color=df['Цвет'])
 
