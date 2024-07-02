@@ -6,17 +6,17 @@ import matplotlib as mpl
 
 # создаем массив на 10 лет
 y = 2014
-years = np.arange(y, y+10, 1)
+ar_years = np.arange(y, y+10, 1)
+print(f'С {ar_years.min()} по {ar_years.max()} годы', '\n')
 
-# добавляем к годам продажи (здесь случайные значения в диапазоне)
-sales_dict = {"Год": years,
-              "Продажи": np.random.randint(400, 1300, size=len(years))}
+# создаем массив продаж длиной по количеству лет и заполняем случайными значениями в диапазоне
+ar_sales = np.random.randint(400, 1300, size=len(ar_years))
 
-# создаем таблицу из продаж
-sales = pd.DataFrame(sales_dict)
+# создаем таблицу из массивов
+df_sales = pd.DataFrame({'Год': ar_years, 'Продажи': ar_sales})
 
 # записываем таблицу в файл
-sales.to_csv('data.csv', index=False)
+df_sales.to_csv('data.csv', index=False)
 
 # Считываем данные из CSV файла (продажи по годам)
 df = pd.read_csv('data.csv')
@@ -37,7 +37,8 @@ print(f"\nСреднее значение продаж за {len(df)} лет :",
 # задаем стиль графика
 mpl.style.use(['Solarize_Light2'])
 
-# зададим цвет в зависимости от величины в колонке 'Продажи' (>1000 - зел, <500 - красный, иначе - синий)
+# добавим колонку 'Цвет' и заполним в зависимости от величины значения в колонке 'Продажи'
+# (>1000 - зел, <500 - красный, иначе - синий)
 df['Цвет'] = df['Продажи'].apply(lambda x: 'green' if x > 1000 else ('red' if x < 500 else 'blue'))
 
 # Создаем график
@@ -59,7 +60,7 @@ plt.grid(False)
 ax.bar_label(bar, label_type='center')
 
 # настраиваем подписи столбцов
-plt.xticks(years, fontsize=14, rotation=60)
+plt.xticks(ar_years, fontsize=14, rotation=60)
 
 # Отображаем график
 plt.show()
