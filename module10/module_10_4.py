@@ -1,6 +1,12 @@
 import threading
 import time
 import queue
+import random
+
+s_print_lock = threading.Lock()
+def s_print(*a, **b):
+    with s_print_lock:
+        print(*a, **b)
 
 
 class Table:
@@ -20,50 +26,58 @@ class Cafe:
         self.tables = tables
 
     def customer_arrival(self):
-        for customer_number in range(1, 5):
+        for customer_number in range(1, 11):
             customer = Customer(customer_number)
             self.queue.put(customer)
-            print(f"Посетитель номер {customer_number} прибыл.")
+            s_print(f"Посетитель номер {customer_number} прибыл.")
             time.sleep(1)
 
     def serve_customer(self, customer):
         for table in self.tables:
             if not table.is_busy:
                 table.is_busy = True
-                print(f"Посетитель номер {customer.number} сел за стол {table.number}.")
-                time.sleep(5)  # время обслуживания 5 секунд
+                s_print(f"Посетитель номер {customer.number} сел за стол {table.number}. (начало обслуживания)")
+#                time.sleep(5)  # время обслуживания 5 секунд
+                time.sleep(random.randint(2, 5))  # для большей наглядности
                 table.is_busy = False
-                print(f"Посетитель номер {customer.number} покушал и ушёл.")
+                s_print(f"Посетитель номер {customer.number} покушал и ушёл. (конец обслуживания)")
                 return
-        print(f"Посетитель номер {customer.number} ожидает свободный стол. (помещение в очередь)")
-
-    def register_customer(self, customer):
-        self.queue.put(customer)
-        print(f"Посетитель {customer} добавлен в очередь")
-
-    def start_serving_customers(self):
-        while not self.queue.empty():
-            customer = self.queue.get()
-            self.serve_customer(customer)
-
-    def print_table_status(self):
-        for table in self.tables:
-            status = "занят" if table.is_busy else "свободен"
-            print(f"Стол {table.number}: {status}")
+        s_print(f"Посетитель номер {customer.number} ожидает свободный стол. (помещение в очередь)")
 
 
-table1 = Table(1)
-table2 = Table(2)
-table3 = Table(3)
-tables = [table1, table2, table3]
+def serve_customers(cafe):
+    while True:
+          customer = cafe.queue.get()
+          cafe.serve_customer(customer)
+          cafe.queue.task_done()
+          print(cafe.queue.empty())
 
-cafe = Cafe(tables)
+if __name__ == "__main__":
+    table1 = Table(1)
+    table2 = Table(2)
+    table3 = Table(3)
+    tables = [table1, table2, table3]
 
-customer_arrival_thread = threading.Thread(target=cafe.customer_arrival)
-customer_arrival_thread.start()
+    cafe = Cafe(tables)
+
+    # Создаем поток для обслуживания посетителей из очереди
+    customer_arrival_thread = threading.Thread(target=cafe.customer_arrival)
+    customer_arrival_thread.start()
+
+    # Создаем потоки для обслуживания посетителей за столами
+#    worker_threads = []
+#    for _ in range(len(tables)):
+#        worker_thread = threading.Thread(target=serve_customers, args=(cafe,))
+#        worker_thread.start()
+#        worker_threads.append(worker_thread)
 
 
-time.sleep(2)  # Подождем немного перед запуском обслуживания
+# Ждем завершения потока, добавляющего посетителей в очередь
+    customer_arrival_thread.join()
 
-cafe.start_serving_customers()
-cafe.print_table_status()
+
+# Ждем завершения всех потоков, обслуживающих посетителей за столами
+#for worker_thread in worker_threads:
+#    worker_thread.join()
+#    print ( "Все посетители обслужены. Завершение работы кафе." )
+
