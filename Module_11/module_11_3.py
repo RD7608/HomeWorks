@@ -14,7 +14,7 @@ class Person:
 person1 = Person("Анатолий", 48)
 person1.rename("Гена")
 
-# Выводим информацию о созданном объекте
+# Выводим информацию об объекте
 print(person1)
 
 
@@ -30,5 +30,7 @@ def introspection_info(obj):
 
 
 # Пример использования:
-number_info = introspection_info(person1)
+number_info = introspection_info(42)
 print(number_info)
+
+print(introspection_info(person1))
