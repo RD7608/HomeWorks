@@ -84,6 +84,6 @@ arrival_thread = threading.Thread(target=cafe.customer_arrival, args=(20,))
 arrival_thread.start()
 
 arrival_thread.join()  # Ожидание завершения потока прихода посетителей
-cafe.wait_for_service_threads()  # Ожидание завершения все потоков обслуживания посетителей
+cafe.wait_for_service_threads()  # Ожидание завершения всех потоков обслуживания посетителей
 
 print(f"\nВсе посетители обслужены. Конец работы")
