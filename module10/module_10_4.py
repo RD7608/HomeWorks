@@ -1,4 +1,5 @@
 import threading
+import queue
 import time
 import random
 
@@ -12,7 +13,7 @@ def s_print(*args, **kwargs):
 
 class Cafe:
     def __init__(self, tables):
-        self.queue = []
+        self.queue = queue.Queue()
         self.customer_threads = []
         self.tables = tables
         self.total_service_time = 0
@@ -69,7 +70,7 @@ class Customer:
             if not served:
                 if not self.in_queue:
                     s_print(f"\033[91mПосетитель {self.number} ожидает свободный стол.\033[0m")
-                    self.cafe.queue.append(self)
+                    self.cafe.queue.put(self)
                     self.in_queue = True
 #                    time.sleep(0.5)
 
