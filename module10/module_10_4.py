@@ -57,8 +57,8 @@ class Customer:
                     # time.sleep = 5  # Задаем время обслуживания посетителя (по заданию)
                     time.sleep(service_time)  # Ждем обслуживание посетителя
                     table.is_busy = False
-                    mess_o = "\033[3m" + f"\nСтол {table.number} освободился, время обслуживания - {service_time}" + "\033[0m"
-                    s_print("\033[1m" + f"Посетитель {self.number} покушал и ушёл." + "\033[0m", mess_o)
+#                    mess_o = "\033[3m" + f"\nСтол {table.number} освободился, время обслуживания - {service_time}" + "\033[0m"
+                    s_print("\033[1m" + f"Посетитель {self.number} покушал и ушёл." + "\033[0m")
                     self.cafe.update_total_service_time(service_time)
                     served = True
                     break
