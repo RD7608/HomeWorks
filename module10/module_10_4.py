@@ -19,13 +19,16 @@ class Customer:
         s_print("\033[92m" + f"Посетитель {number} прибыл" + "\033[0m")
 
     def service_customer(self, table):
-#        ts = 5  # Задаем время обслуживания посетителя (по заданию)
-        ts = random.randint(2, 8)  # Задаем случайное время обслуживания посетителя (более правдподобно)
+        ts = 5  # Задаем время обслуживания посетителя (по заданию)
+#        ts = random.randint(2, 8)  # Задаем случайное время обслуживания посетителя (более правдподобно)
         time.sleep(ts)  # Ждем обслуживание посетителя
         s_print("\033[1m" + f"Посетитель {self.number} покушал и ушёл." + "\033[0m")
         table.is_busy = False
         s_print("\033[3m" + f"Стол {table.number} освободился, время обслуживания - {ts}" + "\033[0m")
         self.cafe.waiting_message_shown = False
+        if not self.cafe.queue.empty():
+            next_customer = self.cafe.queue.get()
+            self.cafe.serve_customer(next_customer)
 
 
 class Table:
@@ -45,25 +48,21 @@ class Cafe:
         for i in range(1, max_customers + 1):
             time.sleep(1)  # Приход посетителя каждую секунду
             customer = Customer(i, self)
+            self.queue.put(customer)
             self.serve_customer(customer)
-            while not self.queue.empty():
-                next_customer = self.queue.get()
-                self.serve_customer(next_customer)
 
     def serve_customer(self, customer):
-        free_table = next((table for table in self.tables if not table.is_busy), None)
-        if free_table:
-            free_table.is_busy = True
-            s_print("\033[94m" + f"Посетитель {customer.number} сел за стол {free_table.number}." + "\033[0m")
-            service_thread = threading.Thread(target=customer.service_customer, args=(free_table,))
-            self.service_threads.append(service_thread)
-            service_thread.start()
-        else:
-            self.queue.put(customer)
-            if not self.waiting_message_shown and all(table.is_busy for table in self.tables):
-                s_print("\033[91m" + f"Посетитель {customer.number} ожидает свободный стол." + "\033[0m")
-                time.sleep(0.5)  # Ждем освобождения стола
-                self.waiting_message_shown = True
+        for table in self.tables:
+            if not table.is_busy:
+                table.is_busy = True
+                s_print("\033[94m" + f"Посетитель {customer.number} сел за стол {table.number}." + "\033[0m")
+                t = threading.Thread(target=customer.service_customer, args=(table,))
+                t.start()
+                self.service_threads.append(t)
+                return
+        if not self.waiting_message_shown:
+            s_print("\033[93m" + "Нет свободных столов..." + "\033[0m")
+            self.waiting_message_shown = True
 
     def wait_for_service_threads(self):
         for service_thread in self.service_threads:
