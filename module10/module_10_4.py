@@ -19,6 +19,7 @@ class Cafe:
         self.queue = []
         self.tables = tables
         self.total_service_time = 0
+        self.total_customers = 0
 
     # Метод submit создает задачу для обслуживания каждого посетителя, а ThreadPoolExecutor автоматически
     # управляет выполнением этих задач в пуле потоков.
@@ -31,6 +32,9 @@ class Cafe:
 
     def update_total_service_time(self, service_time):
         self.total_service_time += service_time
+
+    def update_total_customers(self):
+        self.total_customers += 1
 
 
 class Table:
@@ -48,18 +52,19 @@ class Customer:
 
     def service_customer(self):
         served = False
-        service_time = random.randint(2, 8)
+        service_time = random.randint(2, 8)  # время обслуживания посетителя (для правдоподобности)
+        # service_time = 5  # время обслуживания посетителя (по заданию)
         while not served:
             for table in self.cafe.tables:
                 if not table.is_busy:
                     table.is_busy = True
                     s_print("\033[94m" + f"Посетитель {self.number} сел за стол {table.number}." + "\033[0m")
-                    # time.sleep = 5  # Задаем время обслуживания посетителя (по заданию)
                     time.sleep(service_time)  # Ждем обслуживание посетителя
                     table.is_busy = False
-#                    mess_o = "\033[3m" + f"\nСтол {table.number} освободился, время обслуживания - {service_time}" + "\033[0m"
+                    # mess_o = "\033[3m" + f"\nСтол {table.number} освободился, время обслуживания - {service_time}" + "\033[0m"
                     s_print("\033[1m" + f"Посетитель {self.number} покушал и ушёл." + "\033[0m")
                     self.cafe.update_total_service_time(service_time)
+                    self.cafe.update_total_customers()
                     served = True
                     break
             if not served:
@@ -79,16 +84,13 @@ tables = [table1, table2, table3]
 # Создаем объект Cafe
 cafe = Cafe(tables)
 
-#  задаем количество посетителей для ослуживания
-total_customers = 20
-
-#  запускаем процесс обслуживания посетителей
-cafe.customer_arrival(total_customers)
+#  запускаем процесс обслуживания 20 посетителей
+cafe.customer_arrival(20)
 
 print(f"\nВсе посетители обслужены.\n")
 
 #  выводим справочную информацию
-
 total_service_time = cafe.total_service_time
+total_customers = cafe.total_customers
 print(f"Общее время обслуживания {total_customers} посетителей: {total_service_time} секунд")
 print(f"Среднее время обслуживания одного посетителя: {total_service_time/total_customers} секунд")
