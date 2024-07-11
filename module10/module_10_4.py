@@ -34,8 +34,9 @@ class Cafe:
                 break  # Если нет свободных столов, то выходим из цикла
             customer = self.queue.get()  # Берем первого посетителя из очереди
             service_time = 5  # random.randint(2, 8)
-            table.serve_customer(customer, service_time)
+            table.serve_customer(customer, service_time)  # Садим посетителя за стол
             self.queue.task_done()
+
             self.update_total_service_time(customer.service_time)
             self.update_total_customers()
 
