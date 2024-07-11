@@ -17,14 +17,17 @@ class Cafe:
         self.tables = tables
         self.total_service_time = 0
         self.total_customers = 0
+        self.start_time = time.time()
 
     def customer_arrival(self, max_customers=20):
         for i in range(1, max_customers + 1):
             customer = Customer(i)  # Создаем нового посетителя
             self.queue.put(customer)  # Добавляем посетителя в очередь
-            s_print(f"\033[92mПосетитель {customer.number} прибыл\033[0m")
             if self.free_tables() is None:  # Если нет свободных столов, то выводим сообщение об ожидании
                 s_print(f"\033[93mПосетитель {customer.number} ожидает свободный стол\033[0m")
+
+            serve_customer_thread = threading.Thread(target=cafe.serve_customers)
+            serve_customer_thread.start()  # Запускаем поток для обслуживания посетителя
             time.sleep(1)
 
     def serve_customers(self):
@@ -74,7 +77,7 @@ class Table:
                 s_print(f"\033[94mПосетитель {customer.number} сел за стол {self.number}.\033[0m")
                 time.sleep(service_time)
                 self.is_busy = False
-                customer.get_service_time()
+                customer.set_service_time()
                 s_print(f"\033[1mПосетитель {customer.number} покушал и ушёл.\033[0m",
                         f"\n\033[3mСтол {self.number} свободен,", "Время обслуживания", customer.service_time, "секунд\033[0m")
 
@@ -82,13 +85,12 @@ class Table:
 class Customer:
     def __init__(self, number):
         self.number = number
-        self.time_start = time.time()
+        self.start_time = time.time()
         self.service_time = 0
-        serve_customer_thread = threading.Thread(target=cafe.serve_customers)
-        serve_customer_thread.start()
+        print(f"\033[92mПосетитель {number} прибыл\033[0m")
 
-    def get_service_time(self):
-        self.service_time = round(time.time() - self.time_start, 2)
+    def set_service_time(self):
+        self.service_time = round(time.time() - self.start_time, 2)
         return self.service_time
 
 
@@ -117,7 +119,7 @@ cafe.wait_for_customers()  # Ожидаем обслуживания всех п
 print(f"\nВсе посетители обслужены.\n")
 
 # Выводим общее время обслуживания и среднее время обслуживания
-total_service_time = round(cafe.total_service_time, 2)
-average_service_time = round(cafe.get_average_service_time(), 2)
-print(f"Обслужено посетителей: {cafe.total_customers}, время обслуживания {total_service_time} секунд")
-print(f"Среднее время обслуживания: {average_service_time} секунд")
+total_service_time = cafe.total_service_time
+average_service_time = cafe.get_average_service_time()
+print(f"Обслужено посетителей: {cafe.total_customers}, время обслуживания {total_service_time:.2f} секунд")
+print(f"Среднее время обслуживания: {average_service_time:.2f} секунд")
