@@ -1,69 +1,124 @@
 import threading
-import time
 import queue
+import time
+# import random
 
 
-class Table:
-    def __init__(self, number):
-        self.number = number
-        self.is_busy = False
+s_print_lock = threading.Lock()
 
 
-class Customer:
-    def __init__(self, number):
-        self.number = number
+def s_print(*args, **kwargs):
+    with s_print_lock:
+        print(*args, **kwargs)
 
 
 class Cafe:
     def __init__(self, tables):
         self.queue = queue.Queue()
         self.tables = tables
+        self.total_service_time = 0
+        self.total_customers = 0
 
-    def customer_arrival(self):
-        for customer_number in range(1, 5):
-            customer = Customer(customer_number)
-            self.queue.put(customer)
-            print(f"Посетитель номер {customer_number} прибыл.")
+    def customer_arrival(self, max_customers=20):
+        for i in range(1, max_customers + 1):
+            customer = Customer(i)  # Создаем нового посетителя
+            self.queue.put(customer)  # Добавляем посетителя в очередь
+            s_print(f"\033[92mПосетитель {customer.number} прибыл\033[0m")
+            if self.free_tables() is None:  # Если нет свободных столов, то выводим сообщение об ожидании
+                s_print(f"\033[93mПосетитель {customer.number} ожидает свободный стол\033[0m")
             time.sleep(1)
 
-    def serve_customer(self, customer):
+    def serve_customers(self):
+        while not self.queue.empty():
+            table = self.free_tables()
+            if table is None:
+                break  # Если нет свободных столов, то выходим из цикла
+            customer = self.queue.get()  # Берем первого посетителя из очереди
+            service_time = 5  # random.randint(2, 8)
+            table.serve_customer(customer, service_time)
+            self.queue.task_done()
+            self.update_total_service_time(customer.service_time)
+            self.update_total_customers()
+
+    def wait_for_customers(self):
+        self.queue.join()
+
+    def free_tables(self):
         for table in self.tables:
             if not table.is_busy:
-                table.is_busy = True
-                print(f"Посетитель номер {customer.number} сел за стол {table.number}.")
-                time.sleep(5)  # время обслуживания 5 секунд
-                table.is_busy = False
-                print(f"Посетитель номер {customer.number} покушал и ушёл.")
-                return
-        print(f"Посетитель номер {customer.number} ожидает свободный стол. (помещение в очередь)")
+                return table
 
-    def register_customer(self, customer):
-        self.queue.put(customer)
-        print(f"Посетитель {customer} добавлен в очередь")
+    def update_total_service_time(self, service_time):
+        self.total_service_time += service_time
 
-    def start_serving_customers(self):
-        while not self.queue.empty():
-            customer = self.queue.get()
-            self.serve_customer(customer)
+    def update_total_customers(self):
+        self.total_customers += 1
 
-    def print_table_status(self):
-        for table in self.tables:
-            status = "занят" if table.is_busy else "свободен"
-            print(f"Стол {table.number}: {status}")
+    def get_average_service_time(self):
+        if self.total_customers > 0:
+            return self.total_service_time / self.total_customers
+        else:
+            return 0
 
 
-table1 = Table(1)
-table2 = Table(2)
-table3 = Table(3)
-tables = [table1, table2, table3]
+class Table:
+    def __init__(self, number):
+        self.number = number
+        self.is_busy = False
+        self.lock = threading.Lock()  # Add a lock for each table
 
-cafe = Cafe(tables)
+    def serve_customer(self, customer, service_time):
+        with self.lock:
+            if not self.is_busy:
+                self.is_busy = True
+                s_print(f"\033[94mПосетитель {customer.number} сел за стол {self.number}.\033[0m")
+                time.sleep(service_time)
+                self.is_busy = False
+                customer.get_service_time()
+                s_print(f"\033[1mПосетитель {customer.number} покушал и ушёл.\033[0m",
+                        f"\n\033[3mСтол {self.number} свободен,", "Время обслуживания", customer.service_time, "секунд\033[0m")
+
+
+class Customer:
+    def __init__(self, number):
+        self.number = number
+        self.time_start = time.time()
+        self.service_time = 0
+        serve_customer_thread = threading.Thread(target=cafe.serve_customers)
+        serve_customer_thread.start()
+
+    def get_service_time(self):
+        self.service_time = round(time.time() - self.time_start, 2)
+        return self.service_time
+
+
+# Создаем три объекта Table
+# table1 = Table(1)
+# table2 = Table(2)
+# table3 = Table(3)
+# tables = [table1, table2, table3]
+
+# Создаем столики в кафе
+tables = []
+
+for i in range(1, 4):
+    table = Table(i)
+    tables.append(table)
+
+
+cafe = Cafe(tables)  # Создаем кафе
 
 customer_arrival_thread = threading.Thread(target=cafe.customer_arrival)
-customer_arrival_thread.start()
+customer_arrival_thread.start()  # Запускаем поток прибытия посетителей
 
+customer_arrival_thread.join()  # Ожидаем прибытия всех посетителей
 
-time.sleep(2)  # Подождем немного перед запуском обслуживания
+cafe.wait_for_customers()  # Ожидаем обслуживания всех посетителей
 
-cafe.start_serving_customers()
-cafe.print_table_status()
+print(f"\nВсе посетители обслужены.\n")
+
+# Выводим общее время обслуживания и среднее время обслуживания
+total_service_time = round(cafe.total_service_time, 2)
+average_service_time = round(cafe.get_average_service_time(), 2)
+print(f"Обслужено посетителей: {cafe.total_customers}, время обслуживания {total_service_time} секунд")
+print(f"Среднее время обслуживания: {average_service_time} секунд")
