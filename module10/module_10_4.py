@@ -3,7 +3,6 @@ import queue
 import time
 # import random
 
-
 s_print_lock = threading.Lock()
 
 
