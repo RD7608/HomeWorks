@@ -65,7 +65,7 @@ class Table:
     def __init__(self, number):
         self.number = number
         self.is_busy = False
-        self.lock = threading.Lock()  # Add a lock for each table
+        self.lock = threading.Lock()
 
     def serve_customer(self, customer, service_time):
         with self.lock:
