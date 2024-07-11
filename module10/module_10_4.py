@@ -100,7 +100,6 @@ class Customer:
 
 # Создаем столики в кафе
 tables = []
-
 for i in range(1, 4):
     table = Table(i)
     tables.append(table)
