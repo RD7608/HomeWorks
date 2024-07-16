@@ -1,4 +1,3 @@
-# Задача "Функциональное разнообразие"
 from random import choice
 
 
