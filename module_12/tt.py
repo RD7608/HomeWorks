@@ -1,4 +1,4 @@
-from unittest import TestCase
+import unittest
 
 
 class Runner:
@@ -38,13 +38,13 @@ class Tournament:
                     finishers[place] = participant
                     place += 1
                     self.participants.remove(participant)
-                # Сортировка оставшихся участников по оставшемуся расстоянию, чтобы обеспечить правильный порядок.
+                # Сортировка оставшихся участников по оставшемуся расстоянию
                 self.participants.sort(key=lambda x: self.full_distance - x.distance, reverse=True)
 
         return finishers
 
 
-class TournamentTest(TestCase):
+class TournamentTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
