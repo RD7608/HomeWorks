@@ -1,4 +1,5 @@
-from unittest import TestCase
+import unittest
+
 
 class Runner:
     def __init__(self, name, speed=5):
@@ -17,8 +18,7 @@ class Runner:
 
     def __eq__(self, other):
         if isinstance(other, str):
-            return self.name ==1
- other
+            return self.name == other
         elif isinstance(other, Runner):
             return self.name == other.name
 
@@ -38,11 +38,13 @@ class Tournament:
                     finishers[place] = participant
                     place += 1
                     self.participants.remove(participant)
+                # Сортировка оставшихся участников по оставшемуся расстоянию
+                self.participants.sort(key=lambda x: self.full_distance - x.distance, reverse=True)
 
         return finishers
 
 
-class TournamentTest(TestCase):
+class TournamentTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -56,26 +58,22 @@ class TournamentTest(TestCase):
     @classmethod
     def tearDownClass(cls):
         for key, value in sorted(cls.all_results.items()):
-            print(key, value)
-
+            print(value)
 
     def test_race_usain_nick(self):
         tournament = Tournament(90, self.usain, self.nick)
         results = tournament.start()
-        last_finisher = results[len(results)-1]
-        self.assertEqual(last_finisher, self.nick)
+        self.assertTrue(results[len(results)] == self.nick)
         self.all_results["1"] = results
 
     def test_race_andrey_nick(self):
         tournament = Tournament(90, self.andrey, self.nick)
         results = tournament.start()
-        last_finisher = results[len(results)-1]
-        self.assertEqual(last_finisher, self.nick)
+        self.assertTrue(results[len(results)] == self.nick)
         self.all_results["2"] = results
 
     def test_race_all(self):
         tournament = Tournament(90, self.usain, self.andrey, self.nick)
         results = tournament.start()
-        last_finisher = results[len(results)-1]
-        self.assertEqual(last_finisher, self.nick)
+        self.assertTrue(results[len(results)] == self.nick)
         self.all_results["3"] = results
