@@ -4,6 +4,11 @@ import sqlite3
 conn = sqlite3.connect('not_telegram.db')
 cursor = conn.cursor()
 
+# Проверка, если база данных не пустая, то очистить ее
+cursor.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='Users'")
+if cursor.fetchone()[0] > 0:
+    cursor.execute("DELETE FROM Users")
+
 # Создание таблицы Users, если она еще не создана
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS Users (
