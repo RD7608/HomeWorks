@@ -58,7 +58,9 @@ class TournamentTest(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         for key, value in sorted(cls.all_results.items()):
-            print(value)
+            # print(value)
+            result = {k: v.name for k, v in value.items()}
+            print(result)
 
     def test_race_usain_nick(self):
         tournament = Tournament(90, self.usain, self.nick)
