@@ -58,7 +58,7 @@ class TournamentTest(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         for key, value in sorted(cls.all_results.items()):
-            # print(value)
+            # print(value)     # отображается ({1: <tests_12_2.Runner object at 0x00000294FCD7D040>})
             result = {k: v.name for k, v in value.items()}
             print(result)
 
@@ -79,3 +79,4 @@ class TournamentTest(unittest.TestCase):
         results = tournament.start()
         self.assertTrue(results[len(results)] == self.nick)
         self.all_results["3"] = results
+        
