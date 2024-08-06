@@ -22,8 +22,8 @@ if cursor.fetchone()[0] > 0:
 
 # Заполнение таблицы 10 записями
 users = [
-    ("User{}".format(i+1), "example{0}@gmail.com".format(i+1), (i+1)*10, 1000)
-    for i in range(10)
+    ("User{}".format(i), "example{0}@gmail.com".format(i), i*10, 1000)
+    for i in range(1, 11)
 ]
 cursor.executemany("INSERT INTO Users (username, email, age, balance) VALUES (?, ?, ?, ?)", users)
 
