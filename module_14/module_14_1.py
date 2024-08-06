@@ -22,16 +22,8 @@ if cursor.fetchone()[0] > 0:
 
 # Заполнение таблицы 10 записями
 users = [
-    ("User1", "example1@gmail.com", 10, 1000),
-    ("User2", "example2@gmail.com", 20, 1000),
-    ("User3", "example3@gmail.com", 30, 1000),
-    ("User4", "example4@gmail.com", 40, 1000),
-    ("User5", "example5@gmail.com", 50, 1000),
-    ("User6", "example6@gmail.com", 60, 1000),
-    ("User7", "example7@gmail.com", 70, 1000),
-    ("User8", "example8@gmail.com", 80, 1000),
-    ("User9", "example9@gmail.com", 90, 1000),
-    ("User10", "example10@gmail.com", 100, 1000)
+    ("User{}".format(i+1), "example{0}@gmail.com".format(i+1), (i+1)*10, 1000)
+    for i in range(10)
 ]
 cursor.executemany("INSERT INTO Users (username, email, age, balance) VALUES (?, ?, ?, ?)", users)
 
