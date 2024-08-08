@@ -2,6 +2,7 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher import FSMContext
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 import asyncio
 
 
@@ -19,9 +20,9 @@ class UserState(StatesGroup):
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
     buttons = ['Рассчитать', 'Информация']
-    keyboard.add(*[types.KeyboardButton(text) for text in buttons])
+    keyboard.add(*[KeyboardButton(text) for text in buttons])
     await message.answer('Привет! Я бот, помогающий твоему здоровью.\nВыберите действие:', reply_markup=keyboard)
 
 
