@@ -6,7 +6,7 @@ import requests
 from keyboards import *
 from crud_functions import *
 
-api = ''
+api = '  '
 
 bot = Bot(token=api)
 dp = Dispatcher(bot, storage=MemoryStorage())
