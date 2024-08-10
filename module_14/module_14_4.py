@@ -2,6 +2,7 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher import FSMContext
+import requests
 from keyboards import *
 from crud_functions import *
 
@@ -32,11 +33,28 @@ async def get_buying_list(message: types.Message):
     products = get_all_products()
 
     for product in products:
+
         # Выводим информацию по продукту
         await message.answer(f"Название: {product[1]} | Описание: {product[2]} | Цена: {product[3]}")
-        # Выводим фото продукта
-        with open(product[4], 'rb') as photo:
-            await message.answer_photo(photo)
+        product_photo = product[4]
+        # Проверяем, существует ли фотография
+
+        if product_photo:
+            try:
+                # Проверяем, можно ли загрузить фото по URL-адресу
+                response = requests.get(product_photo)
+                if response.status_code == 200:
+                    # Отправляем изображение
+                    await message.answer_photo(photo=product_photo)
+                else:
+                    # Отправляем сообщение без фотографии
+                    await message.answer(f"Фото продукта отсутствует 1")
+            except requests.exceptions.RequestException:
+                # Отправляем сообщение без фотографии
+                await message.answer(f"Фото продукта отсутствует 2")
+        else:
+            # Отправляем сообщение без фотографии
+            await message.answer(f"Фото продукта отсутствует")
 
     # Создаем клавиатуру с продуктами
     kb_products = types.InlineKeyboardMarkup()
