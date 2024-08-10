@@ -47,13 +47,10 @@ async def get_buying_list(message: types.Message):
                     # Отправляем изображение
                     await message.answer_photo(photo=product_photo)
                 else:
-                    # Отправляем сообщение без фотографии
                     await message.answer(f"Фото продукта отсутствует 1")
             except requests.exceptions.RequestException:
-                # Отправляем сообщение без фотографии
                 await message.answer(f"Фото продукта отсутствует 2")
         else:
-            # Отправляем сообщение без фотографии
             await message.answer(f"Фото продукта отсутствует")
 
     # Создаем клавиатуру с продуктами
