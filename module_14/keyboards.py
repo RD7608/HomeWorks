@@ -7,9 +7,13 @@ kb_start = ReplyKeyboardMarkup(
         [
             KeyboardButton(text='Рассчитать'),
             KeyboardButton(text='Информация')
+
         ],
         [
             KeyboardButton(text='Купить')
+        ],
+        [
+            KeyboardButton(text='Регистрация')
         ]
     ], resize_keyboard=True
 )
