@@ -26,11 +26,14 @@ def calculate_average(numbers):
 
     try:
         sum_result, incorrect_data = personal_sum(numbers)
-        if len(numbers) - incorrect_data == 0:
-            return 0
-        avg = sum_result / (len(numbers) - incorrect_data)
+        n = len(numbers)
+        if n - incorrect_data > 0:
+            avg = sum_result / (n - incorrect_data)
+        else:
+            avg = sum_result / n
         return avg
     except ZeroDivisionError:
+        print('numbers пустая')
         return 0
 
 
@@ -38,3 +41,4 @@ print(f'Результат 1: {calculate_average("1, 2, 3")}')
 print(f'Результат 2: {calculate_average([1, "Строка", 3, "Ещё Строка"])}')
 print(f'Результат 3: {calculate_average(567)}')
 print(f'Результат 4: {calculate_average([42, 15, 36, 13])}')
+print(f'Результат 5: {calculate_average([])}')
