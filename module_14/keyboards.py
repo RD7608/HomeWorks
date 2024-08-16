@@ -28,17 +28,6 @@ kb_calc = InlineKeyboardMarkup(
     ]
 )
 
-# Клавиатура для каталога
-kb_catalog = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [
-            InlineKeyboardButton(text='Продукт 1', callback_data='product_buying'),
-            InlineKeyboardButton(text='Продукт 2', callback_data='product_buying'),
-            InlineKeyboardButton(text='Продукт 3', callback_data='product_buying'),
-            InlineKeyboardButton(text='Продукт 4', callback_data='product_buying')
-        ]
-    ]
-)
 
 # Кнопка "Отмена"
 kb_cancel = InlineKeyboardMarkup(
@@ -51,6 +40,7 @@ kb_cancel = InlineKeyboardMarkup(
 )
 
 
+# Клавиатура для каталога
 def get_kb_products(products):
     kb_products = InlineKeyboardMarkup()
     buttons = [InlineKeyboardButton(text=product[1], callback_data=f'product_buying_{product[0]}') for product in products]
