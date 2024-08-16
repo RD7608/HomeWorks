@@ -36,7 +36,7 @@ async def sing_up(message: types.Message):
     await RegistrationState.username.set()
 
 
-async def set_user_name(message: types.Message, state: FSMContext):
+async def set_username(message: types.Message, state: FSMContext):
     username = message.text
     if is_included(username):
         await message.answer("Пользователь существует, введите другое имя")
@@ -51,7 +51,7 @@ async def set_user_name(message: types.Message, state: FSMContext):
         await RegistrationState.email.set()
 
 
-async def set_user_email(message: types.Message, state: FSMContext):
+async def set_email(message: types.Message, state: FSMContext):
     email = message.text
     if not is_valid_email(email):
         await message.answer("Неверный email, введите другой")
@@ -62,7 +62,7 @@ async def set_user_email(message: types.Message, state: FSMContext):
     await RegistrationState.age.set()
 
 
-async def set_user_age(message: types.Message, state: FSMContext):
+async def set_age(message: types.Message, state: FSMContext):
     try:
         age = int(message.text)
     except ValueError:
@@ -130,24 +130,24 @@ async def get_formulas(call: types.CallbackQuery):
     await call.answer()
 
 
-async def set_age(call: types.CallbackQuery):
+async def get_calories(call: types.CallbackQuery):
     await call.message.answer('Введите свой возраст:')
     await UserState.age.set()
 
 
-async def set_growth(message: types.Message, state: FSMContext):
+async def set_user_age(message: types.Message, state: FSMContext):
     await state.update_data(age=int(message.text))
     await message.answer('Введите свой рост:')
     await UserState.growth.set()
 
 
-async def set_weight(message: types.Message, state: FSMContext):
+async def set_user_growth(message: types.Message, state: FSMContext):
     await state.update_data(growth=int(message.text))
     await message.answer('Введите свой вес:')
     await UserState.weight.set()
 
 
-async def send_calories(message: types.Message, state: FSMContext):
+async def set_user_weight(message: types.Message, state: FSMContext):
     await state.update_data(weight=int(message.text))
     data = await state.get_data()
 
