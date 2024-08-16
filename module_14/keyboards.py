@@ -39,3 +39,20 @@ kb_catalog = InlineKeyboardMarkup(
         ]
     ]
 )
+
+# Кнопка "Отмена"
+kb_cancel = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text='Отмена', callback_data='cancel_registration')
+        ]
+    ],
+    resize_keyboard=True
+)
+
+
+def get_kb_products(products):
+    kb_products = InlineKeyboardMarkup()
+    buttons = [InlineKeyboardButton(text=product[1], callback_data=f'product_buying_{product[0]}') for product in products]
+    kb_products.add(*buttons)
+    return kb_products
