@@ -2,15 +2,20 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher import FSMContext
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import requests
-from keyboards import *
-from crud_functions import *
 
-api = '  '
+from crud_functions import *
+import config
+
+api = config.API
 
 bot = Bot(token=api)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
+# Инициализируем базу данных
+initiate_db()
 
 class UserState(StatesGroup):
     age = State()
@@ -20,8 +25,9 @@ class UserState(StatesGroup):
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
-    # Инициализируем базу данных
-    initiate_db()
+    kb_start = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+    kb_start.row(KeyboardButton(text='Рассчитать'), KeyboardButton(text='Информация'))
+    kb_start.add(KeyboardButton(text='Купить'))
 
     await message.answer('Привет! Я бот, помогающий твоему здоровью.', reply_markup=kb_start)
 
@@ -58,6 +64,7 @@ async def get_buying_list(message: types.Message):
     buttons = [types.InlineKeyboardButton(text=product[1], callback_data=f'product_buying_{product[0]}') for product in
                products]
     kb_products.add(*buttons)
+    kb_products.add(InlineKeyboardButton(text='Назад', callback_data='main_menu'))
     # Отправляем сообщение с клавиатурой
     await message.answer('Выберите продукт для покупки', reply_markup=kb_products)
 
@@ -75,9 +82,19 @@ async def send_confirm_message(call: types.CallbackQuery):
         await call.message.answer('Произошла ошибка при получении информации о продукте.')
     await call.answer()
 
+@dp.callback_query_handler(text='main_menu')
+async def return_to_main_menu(call: types.CallbackQuery):
+    await call.answer()
+    await call.message.edit_reply_markup(reply_markup=None)
+    await call.message.answer('Вы вернулись в главное меню')
+    await start(call.message)
 
 @dp.message_handler(text='Рассчитать')
 async def main_menu(message: types.Message):
+    kb_calc = InlineKeyboardMarkup(resize_keyboard=True)
+    kb_calc.row(InlineKeyboardButton(text='Рассчитать норму калорий', callback_data='calories'),
+                InlineKeyboardButton(text='Формулы расчёта', callback_data='formulas'))
+    kb_calc.add(InlineKeyboardButton(text='Назад', callback_data='main_menu'))
     await message.answer('Выберите опцию:', reply_markup=kb_calc)
 
 
