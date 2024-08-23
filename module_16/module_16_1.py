@@ -20,4 +20,4 @@ def user_info(username: str, age: int):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000)
+    uvicorn.run("module_16_1:app", host="127.0.0.1", port=8000)
