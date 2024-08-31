@@ -7,7 +7,7 @@ app = FastAPI()
 
 
 @app.get("/")
-async def Welcome():
+async def welcome():
     return {"message": "Welcome to Taskmanager"}
 
 app.include_router(user_router)
