@@ -2,10 +2,7 @@ from fastapi import APIRouter
 
 from schemas import CreateTask, UpdateTask
 
-router = APIRouter(
-    prefix="/task",
-    tags=["task"]
-)
+router = APIRouter(prefix="/task", tags=["task"])
 
 
 @router.get("/")
