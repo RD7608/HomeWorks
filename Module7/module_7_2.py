@@ -24,6 +24,6 @@ for elem in result.items():
 
 
 strings = ['a', 'a', 'a', 'v', 'v']
-result = custom_write('test.txt', strings)
+result = custom_write('test_.txt', strings)
 for elem in result.items():
     print(elem)
