@@ -14,15 +14,8 @@ router = APIRouter(prefix="/user", tags=["user"])
 
 @router.get("/")
 async def all_users(db: Annotated[Session, Depends(get_db)]):
-    try:
-        users = db.scalars(select(User)).all()
-        return users
-    except exc.SQLAlchemyError as e:
-        raise HTTPException(status_code=500,
-                            detail=f"Database error: {str(e)}")
-    except Exception as e:
-        raise HTTPException(status_code=500,
-                            detail=f"Internal server error: {str(e)}")
+    users = db.scalars(select(User)).all()
+    return users
 
 
 @router.get("/user_id")
