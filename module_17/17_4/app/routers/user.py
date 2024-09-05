@@ -27,20 +27,12 @@ async def all_users(db: Annotated[Session, Depends(get_db)]):
 
 @router.get("/user_id")
 async def user_by_id(db: Annotated[Session, Depends(get_db)], user_id: int):
-    try:
-        user = db.scalar(select(User).where(User.id == user_id))
-        if user:
-            return user
-        else:
-            raise HTTPException(status_code=404,
-                                detail="User was not found")
-
-    except exc.SQLAlchemyError as e:
-        raise HTTPException(status_code=500,
-                            detail=f"Database error: {str(e)}")
-    except Exception as e:
-        raise HTTPException(status_code=500,
-                            detail=f"Internal server error: {str(e)}")
+    user = db.scalar(select(User).where(User.id == user_id))
+    if user:
+        return user
+    else:
+        raise HTTPException(status_code=404,
+                            detail="User was not found")
 
 
 @router.post("/create")
@@ -71,40 +63,31 @@ async def create_user(db: Annotated[Session, Depends(get_db)], user: CreateUser)
 
 @router.put("/update")
 async def update_user(db: Annotated[Session, Depends(get_db)], user_id: int, user: UpdateUser):
-    try:
-        existing_user = db.scalar(select(User).where(User.id == user_id))
-        if existing_user:
-            db.execute(update(User).where(User.id == user_id).values(firstname=user.firstname,
-                                                                     lastname=user.lastname,
-                                                                     age=user.age))
-            db.commit()
-            return {"status_code": status.HTTP_200_OK,
-                    "transaction": "User update is successful!"}
-        else:
-            raise HTTPException(status_code=404,
-                                detail="User was not found")
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500,
-                            detail=f"Error during user update: {str(e)}")
+    existing_user = db.scalar(select(User).where(User.id == user_id))
+    if existing_user:
+        db.execute(update(User).where(User.id == user_id).values(firstname=user.firstname,
+                                                                 lastname=user.lastname,
+                                                                 age=user.age))
+        db.commit()
+        return {"status_code": status.HTTP_200_OK,
+                "transaction": "User update is successful!"}
+    else:
+        raise HTTPException(status_code=404,
+                            detail="User was not found")
+
 
 
 @router.delete("/delete")
 async def delete_user(db: Annotated[Session, Depends(get_db)], user_id: int):
-    try:
-        existing_user = db.scalar(select(User).where(User.id == user_id))
-        if existing_user:
-            db.execute(delete(User).where(User.id == user_id))
-            db.commit()
-            return {"status_code": status.HTTP_200_OK,
-                    "transaction": "User delete is successful!"}
-        else:
-            raise HTTPException(status_code=404,
-                                detail="User was not found")
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500,
-                            detail=f"Error during user delete: {str(e)}")
+    existing_user = db.scalar(select(User).where(User.id == user_id))
+    if existing_user:
+        db.execute(delete(User).where(User.id == user_id))
+        db.commit()
+        return {"status_code": status.HTTP_200_OK,
+                "transaction": "User delete is successful!"}
+    else:
+        raise HTTPException(status_code=404,
+                            detail="User was not found")
 
 
 @router.delete("/delete-all")
