@@ -153,11 +153,15 @@ async def delete_user(db: Annotated[Session, Depends(get_db)], user_id: int):
 
 @router.delete("/delete-all")
 async def delete_all_users(db: Annotated[Session, Depends(get_db)]):
+    """
+       Удаляет всех пользователей и все задачи.
+    """
     try:
+        db.execute(delete(Task))
         db.execute(delete(User))
         db.commit()
         return {"status_code": status.HTTP_200_OK,
-                "transaction": "All users deleted successfully"}
+                "transaction": "All users and tasks deleted successfully"}
 
     except Exception as e:
         db.rollback()

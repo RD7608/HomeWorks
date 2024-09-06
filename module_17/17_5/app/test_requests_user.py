@@ -1,6 +1,6 @@
 import requests
 
-# удаление всех пользователей
+# удаление всех пользователей и заданий
 response = requests.delete('http://127.0.0.1:8000/user/delete-all')
 print(0, response.json())
 
