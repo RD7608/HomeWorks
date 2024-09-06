@@ -43,7 +43,7 @@ async def create_task(db: Annotated[Session, Depends(get_db)], user_id: int, tas
                     "transaction": "Successful"}
         else:
             raise HTTPException(status_code=404,
-                                detail="User was not found")
+                                detail="User was not found to create task")
     except exc.IntegrityError as e:
         db.rollback()
         raise HTTPException(status_code=409,
@@ -67,7 +67,7 @@ async def update_task(db: Annotated[Session, Depends(get_db)], task_id: int, tas
                 "transaction": "Task update is successful!"}
     else:
         raise HTTPException(status_code=404,
-                            detail="Task was not found")
+                            detail="Task was not found to update")
 
 
 @router.delete("/delete")
@@ -80,7 +80,7 @@ async def delete_task(db: Annotated[Session, Depends(get_db)], task_id: int):
                 "transaction": "Task delete is successful!"}
     else:
         raise HTTPException(status_code=404,
-                            detail="Task was not found")
+                            detail="Task was not found to delete")
 
 
 @router.delete("/delete-all")

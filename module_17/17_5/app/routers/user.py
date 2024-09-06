@@ -18,11 +18,8 @@ async def all_users(db: Annotated[Session, Depends(get_db)]):
     """
     Получает список всех пользователей.
 
-    Аргументы:
-        db (Session): Сессия базы данных.
-
     Возвращает:
-        List[User]: Список объектов пользователей.
+        Список объектов пользователей.
     """
     try:
         users = db.scalars(select(User)).all()
@@ -44,10 +41,10 @@ async def user_by_id(db: Annotated[Session, Depends(get_db)], user_id: int):
       Получает пользователя по его ID.
 
       Аргументы:
-          id (int): ID пользователя.
+          user_id (int): ID пользователя.
 
       Возвращает:
-          Объект пользователя или ошибку 404 если пользователь не найден.
+          Объект пользователя
     """
     user = db.scalar(select(User).where(User.id == user_id))
     if user:
@@ -59,6 +56,15 @@ async def user_by_id(db: Annotated[Session, Depends(get_db)], user_id: int):
 
 @router.get("/user_id/tasks")
 async def tasks_by_user_id(db: Annotated[Session, Depends(get_db)], user_id: int):
+    """
+          Возвращает список задач, связанных с указанным идентификатором пользователя.
+
+          Аргументы:
+              user_id (int): ID пользователя.
+
+          Возвращает:
+              Cписок задач, связанных с указанным идентификатором пользователя.
+        """
     user = db.scalar(select(User).where(User.id == user_id))
     if user:
         tasks = db.scalars(select(Task).where(Task.user_id == user_id)).all()
@@ -85,7 +91,6 @@ async def create_user(db: Annotated[Session, Depends(get_db)], user: CreateUser)
 
     Возвращает:
         Словарь {"status_code": 201, "transaction": "Successful"})
-        или ошибки 409, 500.
     """
     try:
         db.execute(insert(User).values(username=user.username,
@@ -113,10 +118,13 @@ async def update_user(db: Annotated[Session, Depends(get_db)], user_id: int, use
     Обновляет пользователя по ID.
 
     Аргументы:
-        id (int): ID пользователя.
+        user_id (int): ID пользователя.
         firstname (str): Имя.
         lastname (str): Фамилия.
         age (int): Возраст.
+
+    Возвращает:
+        Словарь {"status_code": 200, "transaction": "User update is successful!"})
     """
     existing_user = db.scalar(select(User).where(User.id == user_id))
     if existing_user:
@@ -125,7 +133,7 @@ async def update_user(db: Annotated[Session, Depends(get_db)], user_id: int, use
                                                                  age=user.age))
         db.commit()
         return {"status_code": status.HTTP_200_OK,
-                "transaction": f"User ID {user_id} update is successful!"}
+                "transaction": "User update is successful!"}
     else:
         raise HTTPException(status_code=404,
                             detail="User was not found")
@@ -137,7 +145,10 @@ async def delete_user(db: Annotated[Session, Depends(get_db)], user_id: int):
        Удаляет пользователя по ID и все связанные с ним задачи.
 
        Аргументы:
-           id (int): ID пользователя.
+           user_id (int): ID пользователя.
+
+       Возвращает:
+           Словарь {"status_code": 200, "transaction": "User and associated tasks deleted successfully!"})
     """
     existing_user = db.scalar(select(User).where(User.id == user_id))
     if existing_user:
@@ -155,6 +166,9 @@ async def delete_user(db: Annotated[Session, Depends(get_db)], user_id: int):
 async def delete_all_users(db: Annotated[Session, Depends(get_db)]):
     """
        Удаляет всех пользователей и все задачи.
+
+       Возвращает:
+           Словарь {"status_code": 200, "transaction": "All users and tasks deleted successfully"})
     """
     try:
         db.execute(delete(Task))

@@ -2,7 +2,7 @@ import requests
 
 
 def create_tasks():
-    # Создание заданий
+    # Создание заданий (2 для user_id = 1, 2 для user_id = 3)
     response = requests.post('http://127.0.0.1:8000/task/create', params={'user_id': 1},
                              json={'title': 'FirstTask', 'content': 'Content1', 'priority': 0})
     print(1, response.json())
@@ -41,8 +41,13 @@ def task_error():
 
     # создание задания с уже существующим идентификатором
     response = requests.post('http://127.0.0.1:8000/task/create', params={'user_id': 3},
-                             json={'title': 'FourthTask', 'content': 'Content5', 'priority': 8})
+                             json={'title': 'FourthTask', 'content': 'Content4', 'priority': 8})
     print(9, response.json())
+
+    # создание задания для не существующего пользователя
+    response = requests.post('http://127.0.0.1:8000/task/create', params={'user_id': 100},
+                             json={'title': 'FiftyTask', 'content': 'Content5', 'priority': 0})
+    print(10, response.json())
 
 
 if __name__ == '__main__':
