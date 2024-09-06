@@ -31,12 +31,15 @@ def delete_task_and_user():
 
 
 def task_error():
+    # получение несуществующего задания
     response = requests.get('http://127.0.0.1:8000/task/task_id', params={'task_id': 100})
     print(7, response.json())
 
+    # удаление несуществующего задания
     response = requests.delete('http://127.0.0.1:8000/task/delete', params={'task_id': 100})
     print(8, response.json())
 
+    # создание задания с уже существующим идентификатором
     response = requests.post('http://127.0.0.1:8000/task/create', params={'user_id': 3},
                              json={'title': 'FourthTask', 'content': 'Content5', 'priority': 8})
     print(9, response.json())
