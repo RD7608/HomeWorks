@@ -15,12 +15,40 @@ router = APIRouter(prefix="/user", tags=["user"])
 
 @router.get("/")
 async def all_users(db: Annotated[Session, Depends(get_db)]):
-    users = db.scalars(select(User)).all()
-    return users
+    """
+    Получает список всех пользователей.
+
+    Аргументы:
+        db (Session): Сессия базы данных.
+
+    Возвращает:
+        List[User]: Список объектов пользователей.
+    """
+    try:
+        users = db.scalars(select(User)).all()
+        return users
+
+    except exc.SQLAlchemyError as e:
+        db.rollback()
+        raise HTTPException(status_code=500,
+                            detail=f"Database error: {str(e)}")
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500,
+                            detail=f"User creation failed with error: {str(e)}")
 
 
 @router.get("/user_id")
 async def user_by_id(db: Annotated[Session, Depends(get_db)], user_id: int):
+    """
+      Получает пользователя по его ID.
+
+      Аргументы:
+          id (int): ID пользователя.
+
+      Возвращает:
+          Объект пользователя или ошибку 404 если пользователь не найден.
+    """
     user = db.scalar(select(User).where(User.id == user_id))
     if user:
         return user
@@ -46,6 +74,19 @@ async def tasks_by_user_id(db: Annotated[Session, Depends(get_db)], user_id: int
 
 @router.post("/create")
 async def create_user(db: Annotated[Session, Depends(get_db)], user: CreateUser):
+    """
+    Создает нового пользователя.
+
+    Аргументы:
+        username (str): Имя пользователя.
+        firstname (str): Имя.
+        lastname (str): Фамилия.
+        age (int): Возраст.
+
+    Возвращает:
+        Словарь {"status_code": 201, "transaction": "Successful"})
+        или ошибки 409, 500.
+    """
     try:
         db.execute(insert(User).values(username=user.username,
                                        firstname=user.firstname,
@@ -68,6 +109,15 @@ async def create_user(db: Annotated[Session, Depends(get_db)], user: CreateUser)
 
 @router.put("/update")
 async def update_user(db: Annotated[Session, Depends(get_db)], user_id: int, user: UpdateUser):
+    """
+    Обновляет пользователя по ID.
+
+    Аргументы:
+        id (int): ID пользователя.
+        firstname (str): Имя.
+        lastname (str): Фамилия.
+        age (int): Возраст.
+    """
     existing_user = db.scalar(select(User).where(User.id == user_id))
     if existing_user:
         db.execute(update(User).where(User.id == user_id).values(firstname=user.firstname,
@@ -83,6 +133,12 @@ async def update_user(db: Annotated[Session, Depends(get_db)], user_id: int, use
 
 @router.delete("/delete")
 async def delete_user(db: Annotated[Session, Depends(get_db)], user_id: int):
+    """
+       Удаляет пользователя по ID и все связанные с ним задачи.
+
+       Аргументы:
+           id (int): ID пользователя.
+    """
     existing_user = db.scalar(select(User).where(User.id == user_id))
     if existing_user:
         db.execute(delete(Task).where(Task.user_id == user_id))
