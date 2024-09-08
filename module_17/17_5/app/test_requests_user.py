@@ -6,15 +6,15 @@ print(0, response.json())
 
 # Создание пользователей
 response = requests.post('http://127.0.0.1:8000/user/create',
-                         json={'username': 'user1', 'firstname': 'Pasha', 'lastname': 'Technique', 'age': 40})
+                         json={'username': 'User1', 'firstname': 'Pasha', 'lastname': 'Technique', 'age': 40})
 print(1, response.json())
 
 response = requests.post('http://127.0.0.1:8000/user/create',
-                         json={'username': 'user2', 'firstname': 'Roza', 'lastname': 'Syabitova', 'age': 62})
+                         json={'username': 'User2', 'firstname': 'Roza', 'lastname': 'Syabitova', 'age': 62})
 print(2, response.json())
 
 response = requests.post('http://127.0.0.1:8000/user/create',
-                         json={'username': 'user3', 'firstname': 'Alex', 'lastname': 'Unknown', 'age': 25})
+                         json={'username': 'User3', 'firstname': 'Alex', 'lastname': 'Unknown', 'age': 25})
 print(3, response.json())
 
 # изменение пользователей
@@ -39,6 +39,6 @@ print(7, response.json())
 
 # создаем пользователя с уже существующим именем
 response = requests.post('http://127.0.0.1:8000/user/create',
-                         json={'username': 'user1', 'firstname': 'Pasha', 'lastname': 'Technique', 'age': 40})
+                         json={'username': 'User1', 'firstname': 'Pasha', 'lastname': 'Technique', 'age': 40})
 print(8, response.json())
 
