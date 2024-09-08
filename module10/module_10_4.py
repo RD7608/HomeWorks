@@ -97,7 +97,7 @@ class Customer:
 # Создаем три объекта Table
 # table1 = Table(1)
 # table2 = Table(2)
-# table3 = Table(3)
+# table3 = Table(17_3)
 # tables = [table1, table2, table3]
 
 # Создаем столики в кафе
