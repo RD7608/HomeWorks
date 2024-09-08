@@ -19,5 +19,5 @@ print_params(*values_list)
 print_params(**values_dict)
 
 # Распаковка + отдельные параметры
-values_list_2 = [99, "СТРОКА"]
+values_list_2 = [99.99, "СТРОКА"]
 print_params(*values_list_2, 42)
