@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('task2/class_view/', class_view),
     path('task2/func_view/', func_view),
+    path('task3/', include('task3.urls')),
 ]
