@@ -1,0 +1,33 @@
+   <!DOCTYPE html>
+   {% load static %}
+   <html lang="ru">
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+   </head>
+   <body>
+   <h1>{% block pagename %} <!-- Заголовок страницы будет здесь --> {% endblock %}</h1>
+   <hr width="100%;" color="blue" size="2">
+       <nav>
+           <h3>
+           {% block menu %}
+           <ul>
+               <li><a href="{% url 'index' %}">Главная</a></li>
+               <br>
+               <li><a href="{% url 'shop' %}">Магазин</a></li>
+               <br>
+               <li><a href="{% url 'cart' %}">Корзина</a></li>
+           </ul>
+           {% endblock %}
+           </h3>
+       </nav>
+        <hr width="100%;" color="green" size="3">
+       <div>
+           {% block content %}
+           <!-- Контент страницы будет здесь -->
+           {% endblock %}
+       </div>
+   </body>
+   </html>

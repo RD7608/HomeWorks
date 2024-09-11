@@ -1,0 +1,19 @@
+{% extends 'fourth_task/menu.html' %}
+
+{% block pagename %} Магазин {% endblock %}
+
+{% block content %}
+    <div class="product">
+        <h3>Вода питьевая</h3>
+        <ul>
+            {% for item in water %}
+            <li><i>{{ item }} > </i>
+                <button><b> Купить </b></button>
+            </li>
+            <br>
+            {% endfor %}
+        </ul>
+    </div>
+    <button><h3><a href="{% url 'index' %}">Вернуться обратно</a></h3></button>
+
+{% endblock %}
