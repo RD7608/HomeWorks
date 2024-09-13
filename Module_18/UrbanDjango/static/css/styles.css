@@ -22,3 +22,19 @@ img {
   }
 }
 
+.my-button {
+    background-color: orange; /* Цвет фона */
+    color: white; /* Цвет текста */
+    border: none; /* Убираем рамку */
+    padding: 10px 20px; /* Поля вокруг текста */
+    cursor: pointer; /* Курсор в виде руки */
+}
+
+.my-button:hover {
+    background-color: #45a049; /* Цвет при наведении */
+    color: black; /* Цвет текста */
+}
+
+h1 {
+    text-align: center;
+}
