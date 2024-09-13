@@ -15,6 +15,6 @@ while True:
     else:
         user_input = int(user_input)
     if user_input < 3 or user_input > 20:
-        print("Число должно быть от 17_3 до 20")
+        print("Число должно быть от 3 до 20")
         continue
     print(user_input,"-", find_password(user_input))
