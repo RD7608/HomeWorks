@@ -19,6 +19,7 @@ from django.urls import path, include
 from task2.views import ClassView, func_view
 #from task3.views import index, shop, cart
 from task4.views import index, shop, cart
+from task5.views import sign_up_by_django, sign_up_by_html
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,4 +31,6 @@ urlpatterns = [
     path('task4/', index, name='index'),
     path('task4/shop/', shop, name='shop'),
     path('task4/cart/', cart, name='cart'),
+    path('task5/', sign_up_by_html, name='html_sign_up'),
+    path('task5/django_sign_up/', sign_up_by_django, name='django_sign_up'),
 ]

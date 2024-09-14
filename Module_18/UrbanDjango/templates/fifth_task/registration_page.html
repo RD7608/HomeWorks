@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <br>
+    {% if error %}
+        <h2 class="error">{{ error }}<br></h2>
+    {% endif %}
+
+    {% if success %}
+        <h1 class="success">{{ success }} <br></h1>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {% if form %}
+            {{ form.as_p }}
+        {% else %}
+            <label for="username">Введите логин:</label>
+            <input type="text" id="username" name="username" maxlength="30" required>
+
+            <label for="password">Введите пароль:</label>
+            <input type="text" id="password" name="password" minlength="8" required>
+
+            <label for="repeat_password">Повторите пароль:</label>
+            <input type="text" id="repeat_password" name="repeat_password" minlength="8" required>
+
+            <label for="age">Введите свой возраст:</label>
+            <input type="number" id="age" name="age" max="120" min="0" maxlength="3" required>
+        {% endif %}
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+</body>
+</html>
