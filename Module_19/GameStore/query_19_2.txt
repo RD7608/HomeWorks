@@ -1,0 +1,22 @@
+# Запускаем в терминале django shell
+python manage.py shell
+
+# Импортируем модели
+from task1.models import Buyer, Game
+
+# Создаём покупателей
+buyer1 = Buyer.objects.create(name='Иван', balance=1000.00, age=16)  # Младше 18 лет
+buyer2 = Buyer.objects.create(name='Анна', balance=1500.00, age=25)  # Старше 18
+buyer3 = Buyer.objects.create(name='Сергей', balance=2000.00, age=30)  # Старше 18
+
+# Создаём игры
+game1 = Game.objects.create(title='Приключение в лесу', cost=500.00, size=1.5, description='Завораживающее приключение в лесу.', age_limited=False)  # Без ограничения
+game2 = Game.objects.create(title='Герои битвы', cost=700.00, size=2.0, description='Эпические сражения в мире героев.', age_limited=True)  # С ограничением
+game3 = Game.objects.create(title='Космическое путешествие', cost=600.00, size=1.8, description='Исследуйте бескрайние просторы космоса.', age_limited=True)  # С ограничением
+
+# Связываем покупателей с играми
+
+# buyer2 будет обладателем всех игр
+game1.buyers.set((buyer1, buyer2, buyer3))  # buyer1-3 покупают game1 (игра без ограничения)
+game2.buyers.set([buyer2])  # buyer2 покупает game2 (игра с ограничением)
+game3.buyers.set((buyer2, buyer3))  # buyer2,3 покупают game3 (игра с ограничением)
