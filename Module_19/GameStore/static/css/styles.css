@@ -1,0 +1,48 @@
+/* styles.css */
+.product {
+    font-size: 24px;
+    font-family: "Arial", sans-serif;
+    }
+
+.product button {cd
+    font-size: 18px;
+    font-family: "Arial", sans-serif;
+    }
+
+img {
+  width: 500px;
+  height: 300px;
+  object-fit: cover; /* сохраняет пропорции картинки */
+}
+
+@media (max-width: 768px) {
+  img {
+    width: 300px;
+    height: 200px;
+  }
+}
+
+.my-button {
+    background-color: orange; /* Цвет фона */
+    color: white; /* Цвет текста */
+    border: none; /* Убираем рамку */
+    padding: 10px 20px; /* Поля вокруг текста */
+    cursor: pointer; /* Курсор в виде руки */
+}
+
+.my-button:hover {
+    background-color: #45a049; /* Цвет при наведении */
+    color: black; /* Цвет текста */
+}
+
+h1 {
+    text-align: center;
+}
+
+.error {
+    color: red;
+}
+.success {
+    color: green;
+}
+

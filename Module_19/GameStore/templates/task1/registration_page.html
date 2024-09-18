@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <br>
+    {% if error %}
+        <h2 class="error">{{ error }}<br></h2>
+    {% endif %}
+
+    {% if success %}
+        <h1 class="success">{{ success }} <br></h1>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+             {{ form.as_table }}
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+    <br>
+    <button><h3><a href="{% url 'index' %}">Главная</a></h3></button>
+</body>
+</html>

@@ -1,10 +1,12 @@
 from django.db import models
 
 # Create your models here.
+
 class Buyer(models.Model):
     name = models.CharField(max_length=100, unique=True)  # Имя покупателя
-    balance = models.DecimalField(max_digits=10, decimal_places=2)  # Баланс
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Баланс
     age = models.PositiveIntegerField()  # Возраст
+    password = models.CharField(max_length=100, default='')  # Пароль для входа
 
     def __str__(self):
         return self.name

@@ -1,0 +1,19 @@
+{% extends 'task1/menu.html' %}
+
+{% block pagename %} Магазин {% endblock %}
+
+{% block content %}
+    <div class="product">
+        <h3>Игры</h3>
+        <ul>
+            {% for item in Games %}
+            <li><i>{{ item.title }} | {{ item.description }}. Стоимость {{ item.cost }}</i>
+                <button class="my-button"><b> Купить </b></button>
+            </li>
+            <br>
+            {% endfor %}
+        </ul>
+    </div>
+    <button><h3><a href="{% url 'index' %}">Главная</a></h3></button>
+
+{% endblock %}
