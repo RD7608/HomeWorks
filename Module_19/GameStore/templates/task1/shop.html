@@ -2,18 +2,50 @@
 
 {% block pagename %} Магазин {% endblock %}
 
+
 {% block content %}
     <div class="product">
-        <h3>Игры</h3>
+        <form method="get">
+            <label for="page_size">Выводить по :</label>
+            <select id="page_size" name="page_size" onchange="this.form.submit();">
+                <option value="3" {% if page_size|stringformat:"d" == "3" %}selected{% endif %}>3</option>
+                <option value="5" {% if page_size|stringformat:"d" == "5" %}selected{% endif %}>5</option>
+                <option value="10" {% if page_size|stringformat:"d" == "10" %}selected{% endif %}>10</option>
+                <option value="all" {% if page_size == 'all' %}selected{% endif %}>Все</option>
+            </select>
+        </form>
         <ul>
-            {% for item in Games %}
-            <li><i>{{ item.title }} | {{ item.description }}. Стоимость {{ item.cost }}</i>
-                <button class="my-button"><b> Купить </b></button>
-            </li>
-            <br>
+            {% for game in page_obj %}
+                <li><i>{{ game.title }} | {{ game.description }}. Стоимость {{ game.cost }}</i>
+                    <button class="my-button"><b> Купить </b></button>
+                </li>
+                <br>
+            {% empty %}
+                <li>Нет игр для отображения.</li>
             {% endfor %}
         </ul>
     </div>
+
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li><a href="?page_size={{ page_size }}&page=1">« Первая</a></li>
+            <li><a href="?page_size={{ page_size }}&page={{ page_obj.previous_page_number }}">Назад</a></li>
+        {% endif %}
+
+        {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+                <li><a class="active">{{ i }}</a></li>
+            {% else %}
+                <li><a href="?page_size={{ page_size }}&page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <li><a href="?page_size={{ page_size }}&page={{ page_obj.next_page_number }}">Вперед</a></li>
+            <li><a href="?page_size={{ page_size }}&page={{ page_obj.paginator.num_pages }}">Последняя »</a></li>
+        {% endif %}
+    </ul>
+    <br>
     <button><h3><a href="{% url 'index' %}">Главная</a></h3></button>
 
 {% endblock %}

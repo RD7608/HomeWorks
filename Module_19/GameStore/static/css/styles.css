@@ -45,4 +45,31 @@ h1 {
 .success {
     color: green;
 }
-
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+}
+.pagination li {
+    margin: 0 10px;
+}
+.pagination a {
+    text-decoration: none;
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.pagination a.active {
+    background-color: #007bff;
+    color: white;
+}
+label {
+    font-weight: bold;
+    font-size: 16px;
+    margin-right: 10px;
+}
+#page_size {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    padding-right: 10px;
+}
